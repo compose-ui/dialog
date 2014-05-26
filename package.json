@@ -1,0 +1,22 @@
+{
+  "name": "dialog",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "zuul --phantom -- test/*.test.js",
+    "pretest": "component install && component build"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "component": "^0.19.9"
+  },
+  "devDependencies": {
+    "mocha": "^1.19.0",
+    "zuul": "^1.6.5",
+    "chai": "^1.9.1",
+    "domify": "^1.2.2",
+    "phantomjs": "^1.9.7-7"
+  }
+}

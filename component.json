@@ -1,0 +1,20 @@
+{
+  "name": "dialog",
+  "version": "0.0.1",
+  "repo": "compose-ui/dialog",
+  "dependencies": {
+    "compose-ui/wagon": "*",
+    "component/domify": "*",
+    "desandro/classie": "*",
+    "yields/k": "*"
+  },
+  "scripts": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "templates": [
+    "dialog.html",
+    "one_button.html",
+    "two_button.html"
+  ]
+}

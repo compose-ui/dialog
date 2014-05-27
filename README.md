@@ -1,4 +1,4 @@
-# Dialog
+# Dialog [![Build Status](https://travis-ci.org/compose-ui/dialog.svg?branch=master)](https://travis-ci.org/compose-ui/dialog)
 
 A nice dialog component.
 

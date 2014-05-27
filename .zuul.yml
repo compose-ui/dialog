@@ -1,3 +1,0 @@
-ui: mocha-bdd
-scripts:
-  - 'build/build.js'

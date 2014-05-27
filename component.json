@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "repo": "compose-ui/dialog",
   "dependencies": {
-    "compose-ui/wagon": "~0.0.2",
+    "compose-ui/wagon": "*",
     "compose-ui/animevent": "*",
     "component/domify": "*",
     "desandro/classie": "*",

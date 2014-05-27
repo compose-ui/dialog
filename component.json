@@ -1,6 +1,6 @@
 {
   "name": "dialog",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repo": "compose-ui/dialog",
   "dependencies": {
     "compose-ui/wagon": "~0.0.2",

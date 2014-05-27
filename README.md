@@ -2,7 +2,7 @@
 
 A nice dialog component.
 
-![Preview](../blob/master/preview.png?raw=true)
+![Preview](../../blob/master/preview.png?raw=true)
 
 ## Installation
 

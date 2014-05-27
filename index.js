@@ -4,6 +4,7 @@ var classie = require('classie')
 var oneBtn = require('./one_button.html')
 var twoBtn = require('./two_button.html')
 var k = require('k')(window)
+var animEvent = require('animevent')
 
 var Wagon = require('wagon')
 
@@ -12,7 +13,10 @@ module.exports = Wagon.extend({
   events: {
     'click .dialog-continue': 'continueAction',
     'click .dialog-close': 'closeAction',
-    'animationend': 'tab'
+
+    one: {
+      'animationend': 'tab'
+    }
   },
 
   initialize: function(){
@@ -82,8 +86,8 @@ module.exports = Wagon.extend({
   },
 
   close: function(callback){
-    classie.add( this.html, 'dismiss' )
-    animEvent.one(this.html, 'end', function(event) {
+    classie.add( this.el, 'dismiss' )
+    animEvent.one(this.el, 'end', function(event) {
       if (callback) { callback() }
       this.remove()
     }.bind(this))

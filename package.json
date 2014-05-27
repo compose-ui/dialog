@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "zuul --phantom -- test/*.test.js",
-    "pretest": "component install && component build"
+    "test": "mocha-phantomjs test/index.html",
+    "pretest": "component install --dev && component build --dev"
   },
   "author": "",
   "license": "MIT",
@@ -14,9 +14,6 @@
   },
   "devDependencies": {
     "mocha": "^1.19.0",
-    "zuul": "^1.6.5",
-    "chai": "^1.9.1",
-    "domify": "^1.2.2",
-    "phantomjs": "^1.9.7-7"
+    "mocha-phantomjs": "^3.4.1"
   }
 }

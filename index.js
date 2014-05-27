@@ -16,8 +16,8 @@ module.exports = Wagon.extend({
   },
 
   initialize: function(){
-    this.options.close = options.close || 'Cancel'
-    this.el = this.buildElement()
+    this.options.close = this.options.close || 'Cancel'
+    this.render()
     this.bindKeyboardEvents()
   },
 
@@ -33,7 +33,7 @@ module.exports = Wagon.extend({
   },
 
   show: function(){
-    document.body.appendChild(this.html)
+    document.body.appendChild(this.el)
     return this
   },
 
@@ -89,7 +89,7 @@ module.exports = Wagon.extend({
     }.bind(this))
   },
 
-  buildElement: function(){
+  render: function(){
     el = domify(tpl)
 
     if (this.options.continue) {
@@ -123,7 +123,8 @@ module.exports = Wagon.extend({
       }
     }
 
-    return el
+    this.el = el
+    return this
   }
 
 }, {

@@ -8,6 +8,10 @@
     "desandro/classie": "*",
     "yields/k": "*"
   },
+  "development": {
+    "fat/bean": "*",
+    "chaijs/chai": "*"
+  },
   "scripts": [
     "index.js"
   ],

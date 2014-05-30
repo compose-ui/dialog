@@ -5,6 +5,7 @@
   "dependencies": {
     "compose-ui/wagon": "*",
     "compose-ui/animevent": "*",
+    "compose-ui/dataset-shim": "*",
     "component/domify": "*",
     "desandro/classie": "*",
     "yields/k": "*"

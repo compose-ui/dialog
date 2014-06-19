@@ -71,7 +71,7 @@ module.exports = Wagon.extend({
 
 
     this.close(function(){
-      if (this.options.sumbit) {
+      if (this.options.submit) {
         if(this.options.submit.nodeType) {
           this.options.submit.submit()
         } else {

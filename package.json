@@ -26,6 +26,7 @@
     ]
   },
   "devDependencies": {
+    "qwery": "^4.0.0",
     "bean": "^1.0.14",
     "browserify": "^4.2.0",
     "chai": "^1.9.1",

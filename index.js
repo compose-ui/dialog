@@ -5,6 +5,7 @@ var classie = require('classie')
 var oneBtn = fs.readFileSync(__dirname + '/one_button.html', 'utf8')
 var twoBtn = fs.readFileSync(__dirname + '/two_button.html', 'utf8')
 var key = require('keymaster')
+var qwery = require('qwery')
 var animEvent = require('animevent')
 
 var Wagon = require('wagon')

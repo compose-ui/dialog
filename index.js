@@ -76,7 +76,7 @@ module.exports = Wagon.extend({
         if(this.options.submit.nodeType) {
           this.options.submit.submit()
         } else {
-          qwery(this.options.submit)[0].submit()
+          document.querySelector(this.options.submit).submit()
         }
       } else if (this.options.follow) {
         window.location.pathname = this.options.follow

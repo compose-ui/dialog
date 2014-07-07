@@ -12,7 +12,8 @@
   },
   "development": {
     "fat/bean": "*",
-    "chaijs/chai": "*"
+    "chaijs/chai": "*",
+    "ded/qwery": "*"
   },
   "scripts": [
     "index.js"

@@ -1,5 +1,5 @@
 var assert = require('chai').assert
-var Dialog = require('dialog')
+var Dialog = require('../')
 var domify = require('domify')
 var bean = require('bean')
 

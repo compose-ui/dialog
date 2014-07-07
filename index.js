@@ -1,9 +1,10 @@
+var fs = require('fs')
 var domify = require('domify')
-var tpl = require('./dialog.html')
+var tpl = fs.readFileSync(__dirname + '/dialog.html', 'utf8')
 var classie = require('classie')
-var oneBtn = require('./one_button.html')
-var twoBtn = require('./two_button.html')
-var k = require('k')(window)
+var oneBtn = fs.readFileSync(__dirname + '/one_button.html', 'utf8')
+var twoBtn = fs.readFileSync(__dirname + '/two_button.html', 'utf8')
+var key = require('keymaster')
 var animEvent = require('animevent')
 
 var Wagon = require('wagon')
@@ -26,13 +27,13 @@ module.exports = Wagon.extend({
   },
 
   bindKeyboardEvents: function(){
-    k('tab', this.tab.bind(this))
-    k('enter', this.continueAction.bind(this))
-    k('esc', this.closeAction.bind(this))
+    key('tab', this.tab.bind(this))
+    key('enter', this.continueAction.bind(this))
+    key('esc', this.closeAction.bind(this))
   },
 
   remove: function(){
-    k.unbind()
+    key.unbind('tab, enter, esc')
     Wagon.prototype.remove.apply(this, arguments)
   },
 
@@ -97,7 +98,7 @@ module.exports = Wagon.extend({
     el = domify(tpl)
 
     if (this.options.continue) {
-      el.querySelector('.dialog-actions').innerHTML = twoBtn 
+      el.querySelector('.dialog-actions').innerHTML = twoBtn
       this.continueButton = el.querySelector('.dialog-continue')
 
       this.continueButton.textContent = this.options.continue
@@ -107,7 +108,7 @@ module.exports = Wagon.extend({
         classie.add(this.continueButton, 'primary-destroy-btn')
       }
     } else {
-      el.querySelector('.dialog-actions').innerHTML = oneBtn 
+      el.querySelector('.dialog-actions').innerHTML = oneBtn
     }
 
     this.closeButton = el.querySelector('.dialog-close')
@@ -138,7 +139,7 @@ module.exports = Wagon.extend({
   },
   instantiate: function(event){
     event.preventDefault()
-    this.show(event.target.dataset)
+    this.show.call(this, event.target.dataset)
   },
   show: function(options){
     new this(options).show()

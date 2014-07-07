@@ -95,7 +95,7 @@ module.exports = Wagon.extend({
   },
 
   render: function(){
-    el = domify(tpl)
+    var el = domify(tpl)
 
     if (this.options.continue) {
       el.querySelector('.dialog-actions').innerHTML = twoBtn
@@ -139,7 +139,7 @@ module.exports = Wagon.extend({
   },
   instantiate: function(event){
     event.preventDefault()
-    this.show.call(this, event.target.dataset)
+    this.show(event.target.dataset)
   },
   show: function(options){
     new this(options).show()

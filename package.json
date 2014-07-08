@@ -10,7 +10,7 @@
   "contributors": [ 
     "Brandon Mathis", 
     "Jerome Gravel-Niquet" 
-  ]
+  ],
   "license": "MIT",
   "dependencies": {
     "compose-animevent": "^1.0.0",

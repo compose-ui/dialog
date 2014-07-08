@@ -6,8 +6,9 @@ var oneBtn = fs.readFileSync(__dirname + '/one_button.html', 'utf8')
 var twoBtn = fs.readFileSync(__dirname + '/two_button.html', 'utf8')
 var key = require('keymaster')
 var animEvent = require('compose-animevent')
-
 var Wagon = require('compose-wagon')
+var bean = require('bean')
+require('compose-dataset-shim')
 
 module.exports = Wagon.extend({
 
@@ -76,7 +77,12 @@ module.exports = Wagon.extend({
         if(this.options.submit.nodeType) {
           this.options.submit.submit()
         } else {
-          document.querySelector(this.options.submit).submit()
+          form = document.querySelector(this.options.submit)
+          if (form.dataset.remote == 'true') {
+            bean.fire(form, "submit.rails")
+          } else {
+            form.submit()
+          }
         }
       } else if (this.options.follow) {
         window.location.pathname = this.options.follow

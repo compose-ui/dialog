@@ -79,7 +79,7 @@ module.exports = Wagon.extend({
         } else {
           form = document.querySelector(this.options.submit)
           if (form.dataset.remote == 'true') {
-            bean.fire(form, 'submit.rails')
+            bean.fire(form, 'submit')
           } else {
             form.submit()
           }

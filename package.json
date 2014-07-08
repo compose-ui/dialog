@@ -1,6 +1,6 @@
 {
   "name": "compose-dialog",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A nice dialog component.",
   "license": "MIT",
   "main": "index.js",

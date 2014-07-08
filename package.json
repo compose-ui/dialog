@@ -1,24 +1,27 @@
 {
-  "name": "dialog",
-  "version": "0.0.4",
+  "name": "compose-dialog",
+  "version": "1.0.0",
   "description": "A nice dialog component.",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "test": "mochify"
   },
-  "author": "",
+  "contributors": [ 
+    "Brandon Mathis", 
+    "Jerome Gravel-Niquet" 
+  ]
   "license": "MIT",
   "dependencies": {
-    "animevent": "git://github.com/compose-ui/animevent",
+    "compose-animevent": "^1.0.0",
     "brfs": "^1.1.2",
     "classie": "^0.1.0",
-    "component": "^0.19.9",
     "domify": "^1.2.2",
     "keymaster": "^1.6.2",
-    "wagon": "git://github.com/compose-ui/wagon"
+    "compose-wagon": "^1.0.0"
   },
   "browser": {
-    "k": "./node_modules/k-component/lib/index.js"
+    "dialog": "compose-dialog"
   },
   "browserify": {
     "transform": [

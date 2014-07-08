@@ -6,7 +6,7 @@ A nice dialog component.
 
 ## Installation
 
-- `component install compose-ui/dialog`
+- `npm install compose-dialog`
 - Profit.
 
 ## Usage
@@ -28,12 +28,12 @@ Using the `data-trigger="dialog"` attribute on anything will trigger showing a D
 >Open a dialog</button>
 ```
 
-**NOTE**: You do have to `require('dialog')` at some point though.
+**NOTE**: You do have to `require('compose-dialog')` at some point though.
 
 ### Programmatically
 
 ```javascript
-var Dialog = require('dialog')
+var Dialog = require('compose-dialog')
 
 Dialog.show({ /* options */})
 ```
@@ -43,7 +43,7 @@ This will handle all there is to handle for showing a Dialog.
 ### Programmatically (alternate)
 
 ```javascript
-var Dialog = require('dialog')
+var Dialog = require('compose-dialog')
 
 new Dialog({ /* options */}).show()
 ```

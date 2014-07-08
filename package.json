@@ -14,11 +14,13 @@
   "license": "MIT",
   "dependencies": {
     "compose-animevent": "^1.0.0",
+    "compose-dataset-shim": "^1.0.0",
+    "compose-wagon": "^1.0.0",
+    "bean": "^1.0.14",
     "brfs": "^1.1.2",
     "classie": "^0.1.0",
     "domify": "^1.2.2",
-    "keymaster": "^1.6.2",
-    "compose-wagon": "^1.0.0"
+    "keymaster": "^1.6.2"
   },
   "browserify": {
     "transform": [
@@ -26,7 +28,6 @@
     ]
   },
   "devDependencies": {
-    "bean": "^1.0.14",
     "browserify": "^4.2.0",
     "chai": "^1.9.1",
     "mocha": "^1.19.0",

@@ -1,6 +1,8 @@
 # Changelog
 
-## 1.0.1
+## 1.0.3
+
+*Don't ask why we skipped a few versions...*
 
 - Use `event.currentTarget` instead of `event.target` to get the element the event was originally bound to.
 

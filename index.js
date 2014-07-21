@@ -145,7 +145,7 @@ module.exports = Wagon.extend({
   },
   instantiate: function(event){
     event.preventDefault()
-    this.show(event.target.dataset)
+    this.show(event.currentTarget.dataset)
   },
   show: function(options){
     new this(options).show()

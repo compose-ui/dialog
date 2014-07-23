@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.4
+
+Removed docEvents, deprecating from Wagon.
+
 ## 1.0.3
 
 *Don't ask why we skipped a few versions...*

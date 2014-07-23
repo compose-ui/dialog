@@ -138,17 +138,4 @@ module.exports = Wagon.extend({
     return this
   }
 
-}, {
-
-  docEvents: {
-    'click [data-trigger=dialog]': 'instantiate'
-  },
-  instantiate: function(event){
-    event.preventDefault()
-    this.show(event.currentTarget.dataset)
-  },
-  show: function(options){
-    new this(options).show()
-  }
-
 })

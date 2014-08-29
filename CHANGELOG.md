@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.0.5
+
+- Now dialog supports following external URLs (containing beginning with http or https).
+
 ## 1.0.4
 
-Removed docEvents, deprecating from Wagon.
+- Removed docEvents, deprecating from Wagon.
 
 ## 1.0.3
 

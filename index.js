@@ -88,7 +88,7 @@ module.exports = Wagon.extend({
         if(this.options.follow.match(/^https?:\/\//))
           window.location = this.options.follow
         else
-          window.location.pathname = this.options.follow
+          window.location.href = this.options.follow
       } if (this.options.onConfirm) {
         this.options.onConfirm()
       }

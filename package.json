@@ -1,17 +1,16 @@
 {
   "name": "compose-dialog",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A nice dialog component.",
   "license": "MIT",
   "main": "index.js",
   "scripts": {
     "test": "mochify"
   },
-  "contributors": [ 
-    "Brandon Mathis", 
-    "Jerome Gravel-Niquet" 
+  "contributors": [
+    "Brandon Mathis",
+    "Jerome Gravel-Niquet"
   ],
-  "license": "MIT",
   "dependencies": {
     "compose-animevent": "^1.0.0",
     "compose-dataset-shim": "^1.0.0",

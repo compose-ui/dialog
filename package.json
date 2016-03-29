@@ -1,6 +1,6 @@
 {
   "name": "compose-dialog",
-  "version": "1.0.6",
+  "version": "2.0.0",
   "description": "A nice dialog component.",
   "license": "MIT",
   "main": "index.js",
@@ -12,14 +12,9 @@
     "Jerome Gravel-Niquet"
   ],
   "dependencies": {
-    "compose-animevent": "^1.0.0",
-    "compose-dataset-shim": "^1.0.0",
-    "compose-wagon": "^1.0.0",
-    "bean": "^1.0.14",
+    "compose-event": "^1.0.0",
     "brfs": "^1.1.2",
-    "classie": "^0.1.0",
-    "domify": "^1.2.2",
-    "keymaster": "^1.6.2"
+    "domify": "^1.2.2"
   },
   "browserify": {
     "transform": [
@@ -27,14 +22,12 @@
     ]
   },
   "devDependencies": {
-    "browserify": "^4.2.0",
-    "chai": "^1.9.1",
-    "mocha": "^1.19.0",
-    "mocha-phantomjs": "^3.4.1",
-    "mochify": "^0.10.0"
+    "chai": "^3.5.0",
+    "mochify": "^2.17.0"
   },
   "directories": {
-    "test": "test"
+    "test": "test",
+    "templates": "templates"
   },
   "repository": {
     "type": "git",

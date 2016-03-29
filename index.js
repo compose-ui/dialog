@@ -1,46 +1,71 @@
 var fs = require('fs')
 var domify = require('domify')
-var tpl = fs.readFileSync(__dirname + '/dialog.html', 'utf8')
-var classie = require('classie')
-var oneBtn = fs.readFileSync(__dirname + '/one_button.html', 'utf8')
-var twoBtn = fs.readFileSync(__dirname + '/two_button.html', 'utf8')
-var key = require('keymaster')
-var animEvent = require('compose-animevent')
-var Wagon = require('compose-wagon')
-var bean = require('bean')
-require('compose-dataset-shim')
+var tpl = fs.readFileSync(__dirname + '/templates/dialog.html', 'utf8')
+var oneBtn = fs.readFileSync(__dirname + '/templates/one_button.html', 'utf8')
+var twoBtn = fs.readFileSync(__dirname + '/templates/two_button.html', 'utf8')
+var event = require('compose-event')
 
-module.exports = Wagon.extend({
-
-  events: {
-    'click .dialog-continue': 'continueAction',
-    'click .dialog-close': 'closeAction',
-
-    one: {
-      'animationend': 'tab'
-    }
-  },
-
-  initialize: function(){
-    this.options.close = this.options.close || 'Cancel'
+var dialog = {
+  show: function(options) {
+    this.options = options
     this.render()
-    this.bindKeyboardEvents()
-  },
+    this.listen()
 
-  bindKeyboardEvents: function(){
-    key('tab', this.tab.bind(this))
-    key('enter', this.continueAction.bind(this))
-    key('esc', this.closeAction.bind(this))
-  },
-
-  remove: function(){
-    key.unbind('tab, enter, esc')
-    Wagon.prototype.remove.apply(this, arguments)
-  },
-
-  show: function(){
-    document.body.appendChild(this.el)
     return this
+  },
+
+  render: function() {
+    var el = domify(tpl)
+
+    // Add continue button from two button template and set the 
+    // style and label of the button based on options
+    //
+    if (this.options.continue) {
+      el.querySelector('.dialog-actions').innerHTML = twoBtn
+      this.continueButton = el.querySelector('.dialog-continue')
+
+      this.continueButton.textContent = this.options.continue
+
+      if (this.options.destructive) {
+        this.continueButton.classList.remove('primary-btn')
+        this.continueButton.classList.add('primary-destroy-btn')
+      }
+    } else {
+      el.querySelector('.dialog-actions').innerHTML = oneBtn
+    }
+
+    this.closeButton = el.querySelector('.dialog-close')
+
+    el.querySelector('.dialog-close').textContent = this.options.close || 'Cancel'
+
+
+    var message = el.querySelector('.dialog-message')
+
+    if (this.options.messageHTML) {
+      message.innerHTML = this.options.messageHTML
+    } else {
+      if (this.options.title) {
+        message.innerHTML += "<h2>" + this.options.title + "</h2>"
+      }
+      if (this.options.message) {
+        message.innerHTML += "<p>" + this.options.message + "</p>"
+      }
+    }
+
+    this.el = el
+    document.body.appendChild(this.el)
+  },
+
+  listen: function() {
+    event.on(this.el, 'click', '.dialog-continue', this.continueAction.bind(this))
+    event.on(this.el, 'click', '.dialog-close', this.closeAction.bind(this))
+    event.one(this.el, 'animationend', this.tab.bind(this))
+
+    event.keyOn('tab', this.tab.bind(this))
+    event.keyOn('enter', this.continueAction.bind(this))
+    event.keyOn('esc', this.closeAction.bind(this))
+
+    event.key.setScope('dialog')
   },
 
   tab: function(event){
@@ -56,7 +81,7 @@ module.exports = Wagon.extend({
   closeAction: function(event){
     if (event){ event.preventDefault() }
     this.closeButton.focus()
-    classie.add(this.closeButton, 'active')
+    this.closeButton.classList.add('active')
 
     this.close(function(){
       if (this.options.onDismiss) {
@@ -69,7 +94,7 @@ module.exports = Wagon.extend({
     if (event){ event.preventDefault() }
 
     this.continueButton.focus()
-    classie.add(this.continueButton, 'active')
+    this.continueButton.classList.add('active')
 
 
     this.close(function(){
@@ -96,49 +121,32 @@ module.exports = Wagon.extend({
   },
 
   close: function(callback){
-    classie.add( this.el, 'dismiss' )
-    animEvent.one(this.el, 'end', function(event) {
+    this.el.classList.add('dismiss')
+    event.one(this.el, 'animationend', function(event) {
       if (callback) { callback() }
       this.remove()
     }.bind(this))
   },
 
-  render: function(){
-    var el = domify(tpl)
-
-    if (this.options.continue) {
-      el.querySelector('.dialog-actions').innerHTML = twoBtn
-      this.continueButton = el.querySelector('.dialog-continue')
-
-      this.continueButton.textContent = this.options.continue
-
-      if (this.options.destructive) {
-        classie.remove(this.continueButton, 'primary-btn')
-        classie.add(this.continueButton, 'primary-destroy-btn')
-      }
-    } else {
-      el.querySelector('.dialog-actions').innerHTML = oneBtn
-    }
-
-    this.closeButton = el.querySelector('.dialog-close')
-
-    el.querySelector('.dialog-close').textContent = this.options.close
-
-    var message = el.querySelector('.dialog-message')
-
-    if (this.options.messageHTML) {
-      message.innerHTML = this.options.messageHTML
-    } else {
-      if (this.options.title) {
-        message.innerHTML += "<h2>" + this.options.title + "</h2>"
-      }
-      if (this.options.message) {
-        message.innerHTML += "<p>" + this.options.message + "</p>"
-      }
-    }
-
-    this.el = el
-    return this
+  remove: function(){
+    event.key.setScope('all')
+    event.keyOff('tab, enter, esc')
+    event.off(this.el, 'click')
+    document.body.removeChild(this.el)
   }
 
+}
+
+event.ready(function() {
+  
+  // Trigger is called when a DOM element with data-trigger=dialog is clicked
+  // The data attributes are used as options for configuring a dialog
+  //
+  event.on(document, 'click', '[data-trigger=dialog]', function(event){
+    event.preventDefault()
+    dialog.show(event.currentTarget.dataset)
+  })
 })
+
+
+module.exports = dialog

@@ -40,14 +40,6 @@ Dialog.show({ /* options */})
 
 This will handle all there is to handle for showing a Dialog.
 
-### Programmatically (alternate)
-
-```javascript
-var Dialog = require('compose-dialog')
-
-new Dialog({ /* options */}).show()
-```
-
 ## Options
 
 TODO

@@ -104,7 +104,7 @@ var dialog = {
         } else {
           form = document.querySelector(this.options.submit)
           if (form.dataset.remote == 'true') {
-            bean.fire(form, 'submit')
+            event.fire(form, 'submit')
           } else {
             form.submit()
           }

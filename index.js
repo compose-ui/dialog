@@ -1,9 +1,8 @@
-var fs = require('fs')
 var domify = require('domify')
-var tpl = fs.readFileSync(__dirname + '/templates/dialog.html', 'utf8')
-var oneBtn = fs.readFileSync(__dirname + '/templates/one_button.html', 'utf8')
-var twoBtn = fs.readFileSync(__dirname + '/templates/two_button.html', 'utf8')
-var event = require('compose-event')
+var tpl = require('./templates/dialog')
+var oneBtn = require('./templates/one-button')
+var twoBtn = require('./templates/two-button')
+var Event = require('compose-event')
 
 var dialog = {
   show: function(options) {
@@ -57,15 +56,15 @@ var dialog = {
   },
 
   listen: function() {
-    event.on(this.el, 'click', '.dialog-continue', this.continueAction.bind(this))
-    event.on(this.el, 'click', '.dialog-close', this.closeAction.bind(this))
-    event.one(this.el, 'animationend', this.tab.bind(this))
+    Event.on(this.el, 'click', '.dialog-continue', this.continueAction.bind(this))
+    Event.on(this.el, 'click', '.dialog-close', this.closeAction.bind(this))
+    Event.one(this.el, 'animationend', this.tab.bind(this))
 
-    event.keyOn('tab', this.tab.bind(this))
-    event.keyOn('enter', this.continueAction.bind(this))
-    event.keyOn('esc', this.closeAction.bind(this))
+    Event.keyOn('tab', this.tab.bind(this))
+    Event.keyOn('enter', this.continueAction.bind(this))
+    Event.keyOn('esc', this.closeAction.bind(this))
 
-    event.key.setScope('dialog')
+    Event.key.setScope('dialog')
   },
 
   tab: function(event){
@@ -104,7 +103,7 @@ var dialog = {
         } else {
           form = document.querySelector(this.options.submit)
           if (form.dataset.remote == 'true') {
-            event.fire(form, 'submit')
+            Event.fire(form, 'submit')
           } else {
             form.submit()
           }
@@ -122,27 +121,27 @@ var dialog = {
 
   close: function(callback){
     this.el.classList.add('dismiss')
-    event.one(this.el, 'animationend', function(event) {
+    Event.one(this.el, 'animationend', function(event) {
       if (callback) { callback() }
       this.remove()
     }.bind(this))
   },
 
   remove: function(){
-    event.key.setScope('all')
-    event.keyOff('tab, enter, esc')
-    event.off(this.el, 'click')
+    Event.key.setScope('all')
+    Event.keyOff('tab, enter, esc')
+    Event.off(this.el, 'click')
     document.body.removeChild(this.el)
   }
 
 }
 
-event.ready(function() {
+Event.ready(function() {
   
   // Trigger is called when a DOM element with data-trigger=dialog is clicked
   // The data attributes are used as options for configuring a dialog
   //
-  event.on(document, 'click', '[data-trigger=dialog]', function(event){
+  Event.on(document, 'click', '[data-trigger=dialog]', function(event){
     event.preventDefault()
     dialog.show(event.currentTarget.dataset)
   })

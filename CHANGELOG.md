@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.0.2
+
+- Removed reliance on brfs dependency.
+
+## 2.0.1
+
+- Minor fix to event reference.
+
+## 2.0.0
+
+- Removed Wagon dependency, fully rewritten.
+
 ## 1.0.5
 
 - Now dialog supports following external URLs (containing beginning with http or https).

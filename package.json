@@ -1,11 +1,11 @@
 {
   "name": "compose-dialog",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A nice dialog component.",
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "mochify"
+    "test": "mochify --reporter spec"
   },
   "contributors": [
     "Brandon Mathis",
@@ -13,13 +13,7 @@
   ],
   "dependencies": {
     "compose-event": "^1.0.0",
-    "brfs": "^1.1.2",
     "domify": "^1.3.0"
-  },
-  "browserify": {
-    "transform": [
-      "brfs"
-    ]
   },
   "devDependencies": {
     "chai": "^3.5.0",

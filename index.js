@@ -6,9 +6,9 @@ var Event = require('compose-event')
 
 var dialog = {
   show: function(options) {
-    this.options = options
-    this.render()
-    this.listen()
+    self.options = options
+    self.render()
+    self.listen()
 
     return this
   },
@@ -19,50 +19,50 @@ var dialog = {
     // Add continue button from two button template and set the 
     // style and label of the button based on options
     //
-    if (this.options.continue) {
+    if (self.options.continue) {
       el.querySelector('.dialog-actions').innerHTML = twoBtn
-      this.continueButton = el.querySelector('.dialog-continue')
+      self.continueButton = el.querySelector('.dialog-continue')
 
-      this.continueButton.textContent = this.options.continue
+      self.continueButton.textContent = self.options.continue
 
-      if (this.options.destructive) {
-        this.continueButton.classList.remove('primary-btn')
-        this.continueButton.classList.add('primary-destroy-btn')
+      if (self.options.destructive) {
+        self.continueButton.classList.remove('primary-btn')
+        self.continueButton.classList.add('primary-destroy-btn')
       }
     } else {
       el.querySelector('.dialog-actions').innerHTML = oneBtn
     }
 
-    this.closeButton = el.querySelector('.dialog-close')
+    self.closeButton = el.querySelector('.dialog-close')
 
-    el.querySelector('.dialog-close').textContent = this.options.close || 'Cancel'
+    el.querySelector('.dialog-close').textContent = self.options.close || 'Cancel'
 
 
     var message = el.querySelector('.dialog-message')
 
-    if (this.options.messageHTML) {
-      message.innerHTML = this.options.messageHTML
+    if (self.options.messageHTML) {
+      message.innerHTML = self.options.messageHTML
     } else {
-      if (this.options.title) {
-        message.innerHTML += "<h2>" + this.options.title + "</h2>"
+      if (self.options.title) {
+        message.innerHTML += "<h2>" + self.options.title + "</h2>"
       }
-      if (this.options.message) {
-        message.innerHTML += "<p>" + this.options.message + "</p>"
+      if (self.options.message) {
+        message.innerHTML += "<p>" + self.options.message + "</p>"
       }
     }
 
-    this.el = el
-    document.body.appendChild(this.el)
+    self.el = el
+    document.body.appendChild(self.el)
   },
 
   listen: function() {
-    Event.on(this.el, 'click', '.dialog-continue', this.continueAction.bind(this))
-    Event.on(this.el, 'click', '.dialog-close', this.closeAction.bind(this))
-    Event.one(this.el, 'animationend', this.tab.bind(this))
+    Event.on(self.el, 'click', '.dialog-continue', self.continueAction)
+    Event.on(self.el, 'click', '.dialog-close', self.closeAction)
+    Event.one(self.el, 'animationend', self.tab)
 
-    Event.keyOn('tab', this.tab.bind(this))
-    Event.keyOn('enter', this.continueAction.bind(this))
-    Event.keyOn('esc', this.closeAction.bind(this))
+    Event.keyOn('tab', self.tab)
+    Event.keyOn('enter', self.continueAction)
+    Event.keyOn('esc', self.closeAction)
 
     Event.key.setScope('dialog')
   },
@@ -70,68 +70,68 @@ var dialog = {
   tab: function(event){
     if (event){ event.preventDefault() }
 
-    if(document.activeElement != this.closeButton) {
-      this.closeButton.focus()
+    if(document.activeElement != self.closeButton) {
+      self.closeButton.focus()
     } else {
-      this.continueButton.focus()
+      self.continueButton.focus()
     }
   },
 
   closeAction: function(event){
     if (event){ event.preventDefault() }
-    this.closeButton.focus()
-    this.closeButton.classList.add('active')
+    self.closeButton.focus()
+    self.closeButton.classList.add('active')
 
-    this.close(function(){
-      if (this.options.onDismiss) {
-        this.options.onDismiss()
+    self.close(function(){
+      if (self.options.onDismiss) {
+        self.options.onDismiss()
       }
-    }.bind(this))
+    })
   },
 
   continueAction: function(event){
     if (event){ event.preventDefault() }
 
-    this.continueButton.focus()
-    this.continueButton.classList.add('active')
+    self.continueButton.focus()
+    self.continueButton.classList.add('active')
 
 
-    this.close(function(){
-      if (this.options.submit) {
-        if(this.options.submit.nodeType) {
-          this.options.submit.submit()
+    self.close(function(){
+      if (self.options.submit) {
+        if(self.options.submit.nodeType) {
+          self.options.submit.submit()
         } else {
-          form = document.querySelector(this.options.submit)
+          form = document.querySelector(self.options.submit)
           if (form.dataset.remote == 'true') {
             Event.fire(form, 'submit')
           } else {
             form.submit()
           }
         }
-      } else if (this.options.follow) {
-        if(this.options.follow.match(/^https?:\/\//))
-          window.location = this.options.follow
+      } else if (self.options.follow) {
+        if(self.options.follow.match(/^https?:\/\//))
+          window.location = self.options.follow
         else
-          window.location.href = this.options.follow
-      } if (this.options.onConfirm) {
-        this.options.onConfirm()
+          window.location.href = self.options.follow
+      } if (self.options.onConfirm) {
+        self.options.onConfirm()
       }
-    }.bind(this))
+    })
   },
 
   close: function(callback){
-    this.el.classList.add('dismiss')
-    Event.one(this.el, 'animationend', function(event) {
+    self.el.classList.add('dismiss')
+    Event.one(self.el, 'animationend', function(event) {
       if (callback) { callback() }
-      this.remove()
-    }.bind(this))
+      self.remove()
+    })
   },
 
   remove: function(){
     Event.key.setScope('all')
     Event.keyOff('tab, enter, esc')
-    Event.off(this.el, 'click')
-    document.body.removeChild(this.el)
+    Event.off(self.el, 'click')
+    document.body.removeChild(self.el)
   }
 
 }
@@ -147,5 +147,6 @@ Event.ready(function() {
   })
 })
 
+var self = dialog
 
 module.exports = dialog

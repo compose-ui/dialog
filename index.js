@@ -1,4 +1,3 @@
-var domify = require('domify')
 var tpl = require('./templates/dialog')
 var oneBtn = require('./templates/one-button')
 var twoBtn = require('./templates/two-button')
@@ -14,7 +13,9 @@ var dialog = {
   },
 
   render: function() {
-    var el = domify(tpl)
+    document.body.insertAdjacentHTML('beforeend', tpl)
+    var el = document.body.lastChild
+    document.body.removeChild(el)
 
     // Add continue button from two button template and set the 
     // style and label of the button based on options

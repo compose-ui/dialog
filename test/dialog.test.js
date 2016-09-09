@@ -1,6 +1,5 @@
 var assert = require('chai').assert
 var dialog = require('../')
-var domify = require('domify')
 var event = require('compose-event')
 
 describe('Dialog', function(){
@@ -23,8 +22,7 @@ describe('Dialog', function(){
     if (d) document.body.removeChild(d)
 
     // Add link to trigger new dialog
-    var link = domify("<a class='link' href='#' data-trigger='dialog' data-title='Dialog title' data-close='go away'>link</a>")
-    document.body.appendChild(link)
+    document.body.insertAdjacentHTML('beforeend', "<a class='link' href='#' data-trigger='dialog' data-title='Dialog title' data-close='go away'>link</a>")
     event.fire(document.querySelector('[data-trigger=dialog]'), 'click')
 
     assert.equal(document.querySelector('.dialog h2').textContent, 'Dialog title')

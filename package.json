@@ -1,6 +1,6 @@
 {
   "name": "compose-dialog",
-  "version": "2.0.4",
+  "version": "3.0.0",
   "description": "A nice dialog component.",
   "license": "MIT",
   "main": "index.js",
@@ -8,19 +8,17 @@
     "test": "mochify --reporter spec"
   },
   "contributors": [
-    "Brandon Mathis",
-    "Jerome Gravel-Niquet"
+    "Brandon Mathis"
   ],
   "dependencies": {
-    "compose-event": "^1.0.0"
+    "compose-toolbox": "^1.4.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "mochify": "^2.17.0"
   },
   "directories": {
-    "test": "test",
-    "templates": "templates"
+    "test": "test"
   },
   "repository": {
     "type": "git",

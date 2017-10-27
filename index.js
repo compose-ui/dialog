@@ -1,140 +1,200 @@
-var tpl = require('./templates/dialog')
-var oneBtn = require('./templates/one-button')
-var twoBtn = require('./templates/two-button')
-var Event = require('compose-event')
+var toolbox = require('compose-toolbox'),
+    Event   = toolbox.event,
+    options = {},
+    wrap = document.createElement('div'),
+    dialogEl,
+    defaults = {
+      onShow: function(){},
+      onClose: function(){},
+      buttonTemplate: '<button role="button" class="button"></button>',
+      dialogTemplate: '<div role="dialog" class="dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">\
+  <div class="dialog-card">\
+    <header class="dialog-header">\
+      <h2 class="dialog-title" id="dialog-title"></h2>\
+    </header>\
+    <p class="dialog-description" id="dialog-description"></p>\
+    <div class="dialog-response">\
+      <div class="dialog-actions"></div>\
+    </div>\
+  </div>\
+</div>'}
 
-var dialog = {
-  show: function(options) {
-    self.options = options
-    self.render()
-    self.listen()
+function show( opts ) {
+  if ( typeof opts != 'object' ) { return console.error('Invalid options passed for Dialog', opts) }
 
-    return this
-  },
+  if ( !opts.title ) { return console.error('Dialog must have a title', opts) }
 
-  render: function() {
-    document.body.insertAdjacentHTML('beforeend', tpl)
-    var el = document.body.lastChild
-    document.body.removeChild(el)
+  options = opts
+  dialogEl = template( defaults.dialogTemplate )
 
-    // Add continue button from two button template and set the 
-    // style and label of the button based on options
-    //
-    if (self.options.continue) {
-      el.querySelector('.dialog-actions').innerHTML = twoBtn
-      self.continueButton = el.querySelector('.dialog-continue')
+  addText()
+  addButtons()
 
-      self.continueButton.textContent = self.options.continue
+  document.body.insertAdjacentElement( 'afterbegin', dialogEl )
 
-      if (self.options.destructive) {
-        self.continueButton.classList.remove('primary-btn')
-        self.continueButton.classList.add('primary-destroy-btn')
-      }
-    } else {
-      el.querySelector('.dialog-actions').innerHTML = oneBtn
-    }
+  listen()
 
-    self.closeButton = el.querySelector('.dialog-close')
+  defaults.onShow()
+}
 
-    el.querySelector('.dialog-close').textContent = self.options.close || 'Cancel'
+function listen() {
 
+  Event.on( dialogEl, 'click', '.dialog-continue', continueAction )
+  Event.on( dialogEl, 'click', '.dialog-cancel', cancelAction )
+  Event.afterAnimation( dialogEl, tab, true )
 
-    var message = el.querySelector('.dialog-message')
+  Event.keyOn(  'tab', tab )
+  Event.keyOne( 'enter', continueAction )
+  Event.keyOne( 'esc', cancelAction )
 
-    if (self.options.messageHTML) {
-      message.innerHTML = self.options.messageHTML
-    } else {
-      if (self.options.title) {
-        message.innerHTML += "<h2>" + self.options.title + "</h2>"
-      }
-      if (self.options.message) {
-        message.innerHTML += "<p>" + self.options.message + "</p>"
-      }
-    }
+  Event.key.setScope( 'dialog' )
+}
 
-    self.el = el
-    document.body.appendChild(self.el)
-  },
+// Add title and description from options
+function addText() {
 
-  listen: function() {
-    Event.on(self.el, 'click', '.dialog-continue', self.continueAction)
-    Event.on(self.el, 'click', '.dialog-close', self.closeAction)
-    Event.one(self.el, 'animationend', self.tab)
+  // Add title
+  dialogEl.querySelector( '#dialog-title' ).innerHTML = options.title
 
-    Event.keyOn('tab', self.tab)
-    Event.keyOn('enter', self.continueAction)
-    Event.keyOn('esc', self.closeAction)
-
-    Event.key.setScope('dialog')
-  },
-
-  tab: function(event){
-    if (event){ event.preventDefault() }
-
-    if(document.activeElement != self.closeButton) {
-      self.closeButton.focus()
-    } else {
-      self.continueButton.focus()
-    }
-  },
-
-  closeAction: function(event){
-    if (event){ event.preventDefault() }
-    self.closeButton.focus()
-    self.closeButton.classList.add('active')
-
-    self.close(function(){
-      if (self.options.onDismiss) {
-        self.options.onDismiss()
-      }
-    })
-  },
-
-  continueAction: function(event){
-    if (event){ event.preventDefault() }
-
-    self.continueButton.focus()
-    self.continueButton.classList.add('active')
-
-
-    self.close(function(){
-      if (self.options.submit) {
-        if(self.options.submit.nodeType) {
-          self.options.submit.submit()
-        } else {
-          form = document.querySelector(self.options.submit)
-          if (form.dataset.remote == 'true') {
-            Event.fire(form, 'submit')
-          } else {
-            form.submit()
-          }
-        }
-      } else if (self.options.follow) {
-        if(self.options.follow.match(/^https?:\/\//))
-          window.location = self.options.follow
-        else
-          window.location.href = self.options.follow
-      } if (self.options.onConfirm) {
-        self.options.onConfirm()
-      }
-    })
-  },
-
-  close: function(callback){
-    self.el.classList.add('dismiss')
-    Event.one(self.el, 'animationend', function(event) {
-      if (callback) { callback() }
-      self.remove()
-    })
-  },
-
-  remove: function(){
-    Event.key.setScope('all')
-    Event.keyOff('tab, enter, esc')
-    Event.off(self.el, 'click')
-    document.body.removeChild(self.el)
+  // Add optional description
+  var descriptionEl = dialogEl.querySelector( '#dialog-description' )
+ 
+  if ( options.description ) {
+    descriptionEl.innerHTML = options.description
+  } else {
+    descriptionEl.parentElement.removeChild( descriptionEl )
+    dialogEl.removeAttribute( 'aria-labelledby' )
   }
 
+}
+
+// Add Cancel and Continue buttons (if necessary)
+function addButtons() {
+
+  if ( options.continue || options.follow || options.submit ) {
+
+    var continueButton = template( defaults.buttonTemplate )
+    continueButton.classList.add( 'dialog-continue' )
+    if ( options.destructive ) { continueButton.classList.add( 'destructive' ) }
+    continueButton.innerHTML = options.continue || 'Continue'
+
+    dialogEl.querySelector('.dialog-actions').appendChild( continueButton )
+
+    options.cancel = options.cancel || 'Cancel'
+  }
+
+  var cancelButton = template( defaults.buttonTemplate )
+  cancelButton.classList.add( 'dialog-cancel' )
+  cancelButton.innerHTML = options.cancel || ( options.continue ? 'Cancel' : 'OK' )
+
+  dialogEl.querySelector('.dialog-actions').appendChild( cancelButton )
+
+}
+
+// In a modal window, `tab` must cycle between elements in the modal.
+function tab( event ) {
+
+  // Find all focusable elements in the dialog card
+  var focusable   = dialogEl.querySelectorAll('input:not([type=hidden]), textarea, select, button'),
+      last        = focusable[focusable.length - 1],
+      focused     = document.activeElement
+
+  // If focused on the last focusable element, tab to the first element.
+  if ( focused == last ) {
+    if ( event ){ event.preventDefault() }
+    focusable[0].focus()
+  }
+
+  // Focus on the last element if the focused element is not a child of the dialog
+  if ( !focused || !toolbox.childOf( focused, dialogEl ) ) {
+    last.focus()
+  }
+}
+
+function triggerButton( selector ) {
+  var button = dialogEl.querySelector( selector )
+
+  button.focus()
+  button.classList.add( 'active' )
+}
+
+function cancelAction (event) {
+  if (event){ event.preventDefault() }
+
+  triggerButton( '.dialog-cancel' )
+
+  close( options.onDismiss )
+}
+
+function continueAction ( event ) {
+  if ( event ){ event.preventDefault() }
+
+  triggerButton( '.dialog-continue' )
+
+  close( function() {
+    if ( options.submit ) {
+
+      // Is it an element or a string
+      var form = ( options.submit.nodeType ? options.submit : document.querySelector(options.submit) )
+
+      // Handle ajax forms by firing submit event
+      if (form.dataset.remote == 'true') {
+        Event.fire(form, 'submit')
+      } else {
+        form.submit()
+      }
+    } else if ( options.follow ) {
+      if( options.follow.match(/^https?:\/\//) )
+        window.location = options.follow
+      else
+        window.location.href = options.follow
+    } 
+    
+    if ( options.onConfirm ) options.onConfirm()
+  })
+}
+
+function close( callback ){
+  dialogEl.classList.add( 'dismiss' )
+
+  Event.afterAnimation( dialogEl, function( event ) {
+    if ( callback ) { callback() }
+    remove()
+  }, true)
+}
+
+
+function remove(){
+  Event.keyOff( 'tab, enter, esc' )
+  Event.key.setScope( 'all' )
+  Event.off( dialogEl, 'click' )
+  document.body.removeChild( dialogEl )
+  defaults.onClose()
+}
+
+function template( html ) {
+  wrap.innerHTML = html
+  var el = wrap.firstChild
+  wrap.removeChild( el )
+  return el
+}
+
+// Get all options from data-dialog-*
+function extractOptions( el ) {
+  var opts = {
+    follow:       el.dataset.dialogFollow,
+    title:        el.dataset.dialogTitle,
+    description:  el.dataset.dialogDescription,
+    submit:       el.dataset.dialogSubmit,
+    continue:     el.dataset.dialogContinue,
+    cancel:       el.dataset.dialogCancel,
+    confirm:      el.dataset.dialogConfirm,
+    destructive:  el.dataset.dialogDestructive
+  }
+
+  if ( opts.confirm ) { opts.continue = opts.continue || el.innerHTML }
+
+  return opts
 }
 
 Event.ready(function() {
@@ -142,12 +202,15 @@ Event.ready(function() {
   // Trigger is called when a DOM element with data-trigger=dialog is clicked
   // The data attributes are used as options for configuring a dialog
   //
-  Event.on(document, 'click', '[data-trigger=dialog]', function(event){
+  Event.on( document, 'click', '[data-dialog-title]', function(event){
     event.preventDefault()
-    dialog.show(event.currentTarget.dataset)
+    show( extractOptions( event.currentTarget ) )
   })
 })
 
-var self = dialog
-
-module.exports = dialog
+module.exports = { 
+  show: show,
+  cancel: cancelAction,
+  continue: continueAction,
+  defaults: defaults
+}

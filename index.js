@@ -58,7 +58,7 @@ function addText() {
 
   // Add optional description
   var descriptionEl = dialogEl.querySelector( '#dialog-description' )
- 
+
   if ( options.description ) {
     descriptionEl.innerHTML = options.description
   } else {
@@ -84,6 +84,7 @@ function addButtons() {
   }
 
   var cancelButton = template( defaults.buttonTemplate )
+
   cancelButton.classList.add( 'dialog-cancel' )
   cancelButton.innerHTML = options.cancel || ( options.continue ? 'Cancel' : 'OK' )
 
@@ -137,19 +138,15 @@ function continueAction ( event ) {
       // Is it an element or a string
       var form = ( options.submit.nodeType ? options.submit : document.querySelector(options.submit) )
 
-      // Handle ajax forms by firing submit event
-      if (form.dataset.remote == 'true') {
-        Event.fire(form, 'submit')
-      } else {
-        form.submit()
-      }
+      Event.submit( form )
+
     } else if ( options.follow ) {
       if( options.follow.match(/^https?:\/\//) )
         window.location = options.follow
       else
         window.location.href = options.follow
-    } 
-    
+    }
+
     if ( options.onConfirm ) options.onConfirm()
   })
 }
@@ -192,23 +189,27 @@ function extractOptions( el ) {
     destructive:  el.dataset.dialogDestructive
   }
 
-  if ( opts.confirm ) { opts.continue = opts.continue || el.innerHTML }
+  if ( opts.confirm ) {
+    opts.continue = opts.continue || el.innerHTML
+    opts.submit   = opts.submit   || toolbox.getClosest( el, 'form' )
+  }
 
   return opts
 }
 
 Event.ready(function() {
-  
+
   // Trigger is called when a DOM element with data-trigger=dialog is clicked
   // The data attributes are used as options for configuring a dialog
   //
   Event.on( document, 'click', '[data-dialog-title]', function(event){
     event.preventDefault()
+    event.stopImmediatePropagation()
     show( extractOptions( event.currentTarget ) )
   })
 })
 
-module.exports = { 
+module.exports = {
   show: show,
   cancel: cancelAction,
   continue: continueAction,

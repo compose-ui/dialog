@@ -1,6 +1,6 @@
 {
   "name": "compose-dialog",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A nice dialog component.",
   "license": "MIT",
   "main": "index.js",
@@ -11,7 +11,7 @@
     "Brandon Mathis"
   ],
   "dependencies": {
-    "compose-toolbox": "^1.4.1"
+    "compose-toolbox": "^1.4.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",

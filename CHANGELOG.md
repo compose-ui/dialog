@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.2
+- Fixed event listener removal.
+
+## 3.0.1
+- Fixed submission event bubbling.
+
+## 3.0.0
+- Completely rewritten to do the same things but better.
+
 ## 2.0.3
 - Now using self in place of this references.
 

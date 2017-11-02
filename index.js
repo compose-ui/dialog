@@ -3,6 +3,7 @@ var toolbox = require('compose-toolbox'),
     options = {},
     wrap = document.createElement('div'),
     dialogEl,
+    focusedEl,
     defaults = {
       onShow: function(){},
       onClose: function(){},
@@ -24,6 +25,7 @@ function show( opts ) {
 
   if ( !opts.title ) { return console.error('Dialog must have a title', opts) }
 
+  focusedEl = document.activeElement
   options = opts
   dialogEl = template( defaults.dialogTemplate )
 
@@ -43,9 +45,9 @@ function listen() {
   Event.on( dialogEl, 'click', '.dialog-cancel', cancelAction )
   Event.afterAnimation( dialogEl, tab, true )
 
-  Event.keyOn(  'tab', tab )
-  Event.keyOne( 'enter', continueAction )
-  Event.keyOne( 'esc', cancelAction )
+  Event.keyOn(  'tab',   'dialog', tab )
+  Event.keyOne( 'enter', 'dialog', continueAction )
+  Event.keyOne( 'esc',   'dialog', cancelAction )
 
   Event.key.setScope( 'dialog' )
 }
@@ -162,11 +164,19 @@ function close( callback ){
 
 
 function remove(){
-  Event.keyOff( 'tab, enter, esc' )
-  Event.key.setScope( 'all' )
+
+  // Remove all event listeners
+  Event.key.deleteScope( 'dialog' )
   Event.off( dialogEl, 'click' )
+
+  // Remove the element
   document.body.removeChild( dialogEl )
+
+  // Fire on close callback
   defaults.onClose()
+
+  // Return focus to the focused element before the dialog was shown
+  focusedEl.focus()
 }
 
 function template( html ) {

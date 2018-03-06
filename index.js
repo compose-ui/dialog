@@ -189,6 +189,7 @@ function template( html ) {
 // Get all options from data-dialog-*
 function extractOptions( el ) {
   var opts = {
+    if:           el.dataset.dialogIf,
     follow:       el.dataset.dialogFollow,
     title:        el.dataset.dialogTitle,
     description:  el.dataset.dialogDescription,
@@ -213,9 +214,12 @@ Event.ready(function() {
   // The data attributes are used as options for configuring a dialog
   //
   Event.on( document, 'click', '[data-dialog-title]', function(event){
-    event.preventDefault()
-    event.stopImmediatePropagation()
-    show( extractOptions( event.currentTarget ) )
+    var opts = extractOptions( event.currentTarget )
+    if ( !opts.if || document.querySelector(opts.if) ) {
+      event.preventDefault()
+      event.stopImmediatePropagation()
+      show( opts )
+    }
   })
 })
 

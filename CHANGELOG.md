@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.1.0
+- Added `data-dialog-if="[selector]` - which only shows a dialog if the selector is found.
+
 ## 3.0.2
 - Fixed event listener removal.
 

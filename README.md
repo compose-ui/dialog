@@ -49,4 +49,14 @@ This will handle all there is to handle for showing a Dialog.
 
 ## Options
 
-TODO
+### `dialog-if`
+
+Using `data-dialog-if="[selector]"` you can only trigger a dialog if the selector is found. So for example if you
+only want to show a dialog if a checkbox is checked.
+
+```
+data-dialog-title="Are you sure?" data-dialog-if="#form_id .dangerous-checkbox:checked"
+```
+
+Now when the element is clicked, the event will be stopped and the dialog will be shown only if the checkbox is
+checked.
